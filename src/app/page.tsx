@@ -13,7 +13,9 @@ export default () => {
         <Input type="text" title="Usuário" />
         <Input type="password" title="Senha" />
         <Button title="Entrar" type="1" />
-      </div>
+      </div> 
+ 
+
 
 
     </div>
