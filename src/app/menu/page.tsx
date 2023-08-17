@@ -1,7 +1,6 @@
 import { Button } from "@/components/Button"
-import { Input } from "@/components/Input"
 
-export default () => {
+export default function Balao() {
   return (
     <div className="bg-white w-full min-h-screen flex flex-col items-center justify-center">
       <div>
@@ -10,12 +9,14 @@ export default () => {
       </div>
 
       <div className="lg:w-1/4 md:w-1/3 w-2/3 flex flex-col gap-y-2">
-        <Input type="text" title="Usuário" />
-        <Input type="password" title="Senha" />
-        <Button title="Entrar" type="1" />
-      </div>
+        <Button title="Cadastrar Usuário" type="1" />
+        <Button title="Cadastrar Prêmio" type="1" />
+        <Button title="Criar Roleta" type="1" />
+        <Button title="Criar Balão" type="1" />
+        <Button title="Sair" type="0" />
 
+      </div>
 
     </div>
   )
-}
+} 
