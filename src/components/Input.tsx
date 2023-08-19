@@ -11,4 +11,4 @@ export function Input({ title, type, id }: InputProps) {
             <input id={id} name={id} type={type} className="border-cyan-600 border-2 h-12 text-[22px] rounded-md px-2 w-full bg-slate-100" />
         </div>
     )
-}
+} 

@@ -27,12 +27,14 @@ export default function NovaRoleta() {
         name: name,
         amountSlice: amount,
         limitUse: limitUse,
-        pcolor: pcolor,
-        scolor: scolor,
-        tcolor: tcolor,
-        premios: ' '
+        primaryColor: pcolor,
+        secondaryColor: scolor,
+        textColor: tcolor,
+        premios: ''
       }).then((res) => {
         console.log(res)
+        localStorage.setItem('name', name as string)
+        localStorage.setItem('amountSlice', amount as unknown as string)
         window.location.href = '/menu/roleta/addpremio'
       }).catch((err: AxiosError) => {
         console.log(err.response)
