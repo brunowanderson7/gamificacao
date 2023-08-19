@@ -7,11 +7,13 @@ import { FormEvent } from "react"
 import { api } from "@/lib/api"
 import { AxiosError } from "axios"
 import Link from 'next/link'
+import { SelectPremio } from "@/components/SelectPremio"
 
 
 
 export default function RoletaPremio() {
   const [paletes, setPaletes] = useState(0);
+  const [options, setOptions] = useState([])
 
   useEffect(() => {
     const amountSliceString = localStorage.getItem('amountSlice');
@@ -21,6 +23,21 @@ export default function RoletaPremio() {
     }
   }, []);
   const premioSelect = []
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/listpremios');
+        const premios = response.data;
+        setOptions(premios.data);
+        console.log(premios)
+      } catch (error) {
+        console.error('Erro ao buscar os prêmios', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
   async function handleSubmitPremio(event: FormEvent<HTMLFormElement>) {
@@ -42,18 +59,21 @@ export default function RoletaPremio() {
     }).then((res) => {
       console.log(res)
       alert('Premios OK!')
-      // localStorage.setItem('name', name as string)
-      // window.location.href = '/menu/roleta/addpremio'
+      localStorage.removeItem('name')
+      localStorage.removeItem('amountSlice')
+      window.location.href = '/menu'
     }).catch((err: AxiosError) => {
       console.log(err.response)
     })
     console.log(res)
   }
 
+  
+
 
 
   for (let i = 0; i < paletes; i++) {
-      premioSelect.push(<Input id={'id'+i} title="Selecione o Prêmio" type="text"/>);
+    premioSelect.push(<SelectPremio id={'id'+i} options={options} />);
   }
 
 
@@ -70,11 +90,6 @@ export default function RoletaPremio() {
         }
         <Button title="Confirmar" type="1" />
       </form>
-
-      <div className="lg:w-1/4 md:w-1/3 w-2/3 flex flex-col gap-y-2">
-        <Button title="Voltar" type="0" />
-      </div>
-
     </div>
   )
 } 
