@@ -1,20 +1,18 @@
 'use client'
 
-import { DataRoulette } from "@/components/DataRoulette"
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+
+//components
 import { api } from "@/lib/api"
-import { useRouter } from "next/router"
+import { DataRoulette } from "@/components/DataRoulette"
 
 
 
 export default function Roleta() {
 
-  
-
-  // const { name } = useParams()
-  // const router = useRouter();
-  // const { name } = router.query;
-  const name = 'ROLETA3'
+  const searchParams = useSearchParams()
+  const name = searchParams.get('name')
   const [data, setData] = useState([])
 
 
@@ -35,15 +33,27 @@ export default function Roleta() {
       fetchData();
   }, []);
 
-
   console.log(data)
+
+
+  const [tentativas, setTentativas] = useState(true)
+
+  async function attTentativas () {
+    const test = await api.post('/updateip', {
+      name: name,
+    }).then((test) => {
+      console.log("test", test.data)
+      setTentativas(test.data.data)
+      
+    })
+  }
   
 
   return (
       <div  className='flex items-center justify-center flex-col w-full h-screen bg-cyan-300'>
 
         { // @ts-ignore
-          (data.length !== 0) && <DataRoulette data={data}/>
+          ((data.length !== 0 ) && (tentativas)) ? <DataRoulette tentativas={() => attTentativas()} data={data}/> : (tentativas === false) ? <h1 className='text-4xl'>Tentativas esgotadas</h1> : <h1 className='text-4xl'>Carregando...</h1>
         }
                 
       

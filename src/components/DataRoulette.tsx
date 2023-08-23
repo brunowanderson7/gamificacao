@@ -19,13 +19,14 @@ export interface DataProps {
 
 interface RouletteProps {
     data: DataProps
+    tentativas: () => void
 }
 
 
-export function DataRoulette({ data }: RouletteProps){
+export function DataRoulette({ data, tentativas }: RouletteProps){
 
     console.log("Data Rolette log", data)
-    const newPremios = data.premios?.split(',')
+    // const newPremios = data.premios?.split(',')
 
     const [premios, setPremios] = useState<string[]>([])
      
@@ -73,6 +74,6 @@ export function DataRoulette({ data }: RouletteProps){
     console.log("Dados para roleta",newData)
 
     return (
-        <>{(newData.length !== 0 ) && <Roulette data={newData}/>}</>
+        <>{(newData.length !== 0 ) && <Roulette tentativas={tentativas} data={newData}/>}</>
     )
 }

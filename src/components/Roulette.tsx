@@ -17,9 +17,10 @@ interface DataProps {
 
 interface RouletteProps {
     data: DataProps[]
+    tentativas: () => void;
 }
 
-export function Roulette({ data }: RouletteProps){
+export function Roulette({ data, tentativas }: RouletteProps){
 
 
     const [mustSpin, setMustSpin] = useState(false);
