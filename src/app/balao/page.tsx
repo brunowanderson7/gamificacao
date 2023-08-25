@@ -41,8 +41,9 @@ export default function Balao() {
   const [tentativas, setTentativas] = useState(true)
 
   async function attTentativas () {
-    const test = await api.post('/updateip', {
+    const test = await api.post('/stateip', {
       name: name,
+      typ: 1,
     }).then((test) => {
       console.log("test", test.data)
       setTentativas(test.data.data)
@@ -53,7 +54,7 @@ export default function Balao() {
 
 
   return (
-      <div className='flex items-center justify-center flex-col w-full h-screen bg-cyan-300'>
+      <div className='flex items-center justify-center flex-col w-full h-screen overflow-y-hidden'>
           
           {// @ts-ignore
             ((data.length !== 0 ) && (tentativas)) ? <DataBalaoComp tentativas={() => attTentativas()} data={data}/> : (tentativas === false) ? <h1 className='text-4xl'>Tentativas esgotadas</h1> : <h1 className='text-4xl'>Carregando...</h1>

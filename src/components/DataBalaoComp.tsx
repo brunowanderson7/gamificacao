@@ -11,6 +11,7 @@ interface BalaoPros {
     limitUse: number;
     primaryColor: string;
     secondaryColor: string;
+    bgColor: string;
     premios: string;
 }
 
@@ -21,6 +22,8 @@ interface DataBalaoProps {
 
 
 export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
+
+    console.log("Data Rolette log", data)
 
     const newPremios = data.premios?.split(',')
     const [premios, setPremios] = useState<string[]>([])
@@ -50,6 +53,8 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
         )
     })
 
+    console.log("New Data log",newData)
+
 
     function shuffleArray<T>(array: T[]): T[] {
         const shuffledArray = [...array];
@@ -58,30 +63,46 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
           [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
         }
         return shuffledArray;
-      }
+    }
 
 
-      const randomizedArray: [string, string][] = shuffleArray(newData);
+    const randomizedArray: [string, string][] = shuffleArray(newData);
+
+    async function attIps() {
+        const up = await api.post('/updateip', {
+            name: data.name,
+            typ: 0,
+        }).then((up) => {
+            setRestantes(restantes - 1)
+        })
+    }
+
+    async function blockIp () {
+        await api.post('/blockip', {
+            name: data.name,
+            limit: data.limitUse
+        })
+    }
 
 
 
     return (
-        <>
-            <div className={`flex items-center justify-center p-4 rounded-lg text-2xl`}>
+        <div className="flex items-center justify-center flex-col w-full h-screen overflow-y-hidden">
+            <div className="flex items-center justify-center p-4 rounded-lg text-2xl">
                 Restam <span className="p-1 mx-1 border-2 bg-white/30 text-black rounded-md">{ restantes }</span> tentativa(s)!
             </div>
-            <div className={`${data.secondaryColor} mt-4 items-center justify-center flex flex-wrap gap-2 p-4 rounded-lg`}>
+            <div className="mt-4 items-center justify-center flex gap-2 bg-black/20 p-8 sm:p-4 rounded-lg">
 
                 {
                     randomizedArray.map((balao, index) => {
                         return (
-                            <BalaoComp restantes={() => {setRestantes(restantes - 1)}} tentativas={tentativas} key={index} color={data.primaryColor} name={balao[1]} id={balao[0].toString()}/>
+                            <BalaoComp restantes={attIps} block={blockIp} tentativas={tentativas} key={index} color={data.primaryColor} name={balao[1]} id={balao[0].toString()}/>
                         )
                     })
                 }
                 
 
             </div>
-        </>
+        </div>
     )
 }

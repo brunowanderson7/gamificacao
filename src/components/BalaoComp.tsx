@@ -11,9 +11,10 @@ interface BalaoProps {
     id: string;
     tentativas: () => void;
     restantes: () => void;
+    block: () => void;
 }
 
-export function BalaoComp( {color, name, id, tentativas, restantes}: BalaoProps ) {
+export function BalaoComp( {color, name, id, tentativas, restantes, block}: BalaoProps ) {
     const [poow, setPoow] = useState(true)
     const [modal, setModal] = useState(false)
 
@@ -45,7 +46,7 @@ export function BalaoComp( {color, name, id, tentativas, restantes}: BalaoProps 
             </motion.div>
 
             {
-                modal && <OverlayModal name={name} info={'Você ganhou um prêmio!'} close={close}/>
+                modal && <OverlayModal block={block} name={name} info={'Você ganhou um prêmio!'} close={close}/>
             }
         </>
         

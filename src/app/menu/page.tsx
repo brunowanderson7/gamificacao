@@ -21,6 +21,7 @@ export default function Balao() {
       <div className="lg:w-1/4 md:w-1/3 w-2/3 flex flex-col gap-y-2">
         <Link href="/menu/cadastrar"><Button title="Cadastrar Usuário" type="1" /></Link>
         <Link href="/menu/premio"><Button title="Cadastrar Prêmio" type="1" /></Link>
+        <Link href="/menu/check"><Button title="Checar Ganhador" type="1" /></Link>
         <Link href="/menu/roleta"><Button title="Criar Roleta" type="1" /></Link>
         <Link href="/menu/balao"><Button title="Criar Balão" type="1" /></Link>
         <Button title="Sair" type="0"  />

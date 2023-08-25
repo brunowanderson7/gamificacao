@@ -19,6 +19,7 @@ export default function NovaRoleta() {
     const limitUse = Number(formData.get('limit'))
     const pcolor = formData.get('pcolor')
     const scolor = formData.get('scolor')
+    // const bgcolor = formData.get('bgcolor')
     const tcolor = formData.get('tcolor')
 
     console.log(name, amount, limitUse, pcolor, scolor, tcolor)
@@ -29,6 +30,7 @@ export default function NovaRoleta() {
         limitUse: limitUse,
         primaryColor: pcolor,
         secondaryColor: scolor,
+        bgColor: '',
         textColor: tcolor,
         premios: ''
       }).then((res) => {
@@ -54,6 +56,7 @@ export default function NovaRoleta() {
         <Input id="name" type="text" title="Nome" />
         <Input id="pcolor" type="text" title="Cor Primaria" />
         <Input id="scolor" type="text" title="Cor Secundaria" />
+        {/* <Input id="bgcolor" type="text" title="Cor de Fundo" /> */}
         <Input id="tcolor" type="text" title="Cor de Texto" />
         <Select id="palete" min={4} max={16} title="Numero de Paletas" /> {/*  Apenas numeros pares */}
         <Select id="limit" min={1} max={99} title="Limite de Tentativas" />

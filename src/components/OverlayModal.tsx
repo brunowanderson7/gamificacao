@@ -1,3 +1,4 @@
+import { api } from '@/lib/api';
 import html2canvas from 'html2canvas'
 import { useRef } from 'react'
 
@@ -7,32 +8,68 @@ interface ModalProps {
     name: string;
     info: string;
     close: () => void;
+    block: () => void;
 }
 
 
-export function OverlayModal ({name, info, close} : ModalProps) {
+export function OverlayModal ({name, info, close, block} : ModalProps) {
 
     const divRef = useRef(null)
+    const zap = "89994417960"
 
     const exportAndShare = async () => {
         const divElement = divRef.current;
 
+        try {
+            await api.post('/winner', {
+                name: name,
+                code: hash,
+                time: t
+            }).then(() => {
+                console.log("Vencedor salvo")
+            })
+
+            await api.post('/updatepremio', {
+                name: name
+            }).then(() => {
+                console.log("Prêmio atualizado")
+            })
+
+            block()
+
+
+
+        } catch (error) {
+            console.error('Erro ao salvar vencedor', error);
+        }
+
         if (divElement) {
             const canvas = await html2canvas(divElement);
             const imageDataURL = canvas.toDataURL('image/png');
-
-            // Crie um elemento de link para fazer o download da imagem
-            const link = document.createElement('a');
-            link.href = imageDataURL;
-            link.download = 'imagem.png';
-            link.click();
+        
+            // Crie um link para abrir o WhatsApp com a imagem anexada
+            const whatsappURL = `whatsapp://send?phone=${zap}&text=Hash%20${hash}&image=${encodeURIComponent(imageDataURL)}`;
+        
+            // Tente abrir o link no WhatsApp
+            window.location.href = whatsappURL;
         }
 
         close()        
       };
 
+      function time () {
+        const date = new Date()
+        const day = date.getDate()
+        const month = date.getMonth()
+        const year = date.getFullYear()
+        const hour = date.getHours()
+        const minutes = date.getMinutes()
+        const seconds = date.getSeconds()
+        const time = `${day}/${month}/${year} - ${hour}:${minutes}:${seconds}`
+        return time
+      }
       const hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-      const time = () => new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'})
+      const t = time()
 
 
     return (
@@ -46,12 +83,12 @@ export function OverlayModal ({name, info, close} : ModalProps) {
                         name === 'Resgatado' ? <p>Esse prêmio já foi reivindicado!</p> : <p>{info}</p>
                     }
                 
-                    <div className='text-sm mt-4'>
+                    <div className='text-sm mt-4 flex flex-col items-center justify-center'>
                         {
                             name !== 'Resgatado' && <p>Código: {hash}</p>
                         }
                         {
-                            name !== 'Resgatado' && <p>{time()}</p>
+                            name !== 'Resgatado' && <p>{t}</p>
                         }
                     </div>
                 </div>

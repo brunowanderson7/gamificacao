@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 
 export interface DataProps {
     id: string;
-    nome: string;
+    name: string;
     amountSlice: number;
     limitUse: number;
     primaryColor: string;
     secondaryColor: string;
+    bgColor: string;
     textColor: string;
     premios: string;
 }
@@ -27,6 +28,8 @@ export function DataRoulette({ data, tentativas }: RouletteProps){
 
     console.log("Data Rolette log", data)
     // const newPremios = data.premios?.split(',')
+    const [restantes, setRestantes] = useState<number>(data.limitUse)
+
 
     const [premios, setPremios] = useState<string[]>([])
      
@@ -71,9 +74,31 @@ export function DataRoulette({ data, tentativas }: RouletteProps){
         }
     })
 
+
+    async function attIps() {
+        const up = await api.post('/updateip', {
+            name: data.name,
+            typ: 0,
+        }).then((up) => {
+            setRestantes(restantes - 1)
+        })
+    }
+
+    async function blockIp () {
+        await api.post('/blockip', {
+            name: data.name,
+            limit: data.limitUse
+        })
+    }
+
     console.log("Dados para roleta",newData)
 
     return (
-        <>{(newData.length !== 0 ) && <Roulette tentativas={tentativas} data={newData}/>}</>
+        <div className="flex items-center justify-center flex-col w-full h-screen overflow-y-hidden">
+            <div className="flex items-center justify-center p-4 rounded-lg text-2xl">
+                Restam <span className="p-1 mx-1 border-2 bg-white/30 text-black rounded-md">{ restantes }</span> tentativa(s)!
+            </div>
+            {(newData.length !== 0 ) && <Roulette restantes={attIps} block={blockIp} tentativas={tentativas} data={newData}/>}
+        </div>
     )
 }

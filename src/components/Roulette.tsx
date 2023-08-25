@@ -4,7 +4,9 @@
 import React, { useState, useEffect } from 'react'
 import { Wheel } from 'react-custom-roulette'
 import { motion } from "framer-motion";
+import { OverlayModal } from './OverlayModal';
 import { api } from '@/lib/api';
+import { OverlayBlock } from './OverlayBlock';
 
 
 interface DataProps {
@@ -18,26 +20,47 @@ interface DataProps {
 interface RouletteProps {
     data: DataProps[]
     tentativas: () => void;
+    restantes: () => void;
+    block: () => void;
 }
 
-export function Roulette({ data, tentativas }: RouletteProps){
+export function Roulette({ data, tentativas, restantes, block }: RouletteProps){
 
 
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
+    const [modal, setModal] = useState(false)
+    const [win, setWin] = useState<number>(0)
+    const [over , setOver] = useState(false)
+
 
     const handleSpinClick = () => {
         const newPrizeNumber = Math.floor(Math.random() * data.length)
         console.log(newPrizeNumber)
         setPrizeNumber(newPrizeNumber)
         setMustSpin(true)
+        restantes()
+        setOver(true)
+        setTimeout(() => {
+            setOver(false)
+            setWin(newPrizeNumber)
+            setModal(true)
+        }, 12000)
+    }
+
+    function close () {
+        setModal(false)
+        tentativas()
     }
 
 
 
 
     return (
-        <div>
+        <div className='flex flex-col items-center justify-center'>
+            {
+                over && <OverlayBlock/>
+            }            
             <div className='flex relative p-2 rounded-full items-center justify-center bg-purple-500 shadow-black shadow-md'>
                 <Wheel
                     fontWeight={700}
@@ -62,6 +85,10 @@ export function Roulette({ data, tentativas }: RouletteProps){
                     <button className='text-xl font-bold font-mono ' onClick={handleSpinClick}>SPIN</button>
                 </motion.div>
             </div>
+            {
+                modal && <OverlayModal block={block} name={data[win].option} info={'Você ganhou um prêmio!'} close={close}/>
+            }
+            
         </div>
     )
 

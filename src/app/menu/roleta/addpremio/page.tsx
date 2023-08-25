@@ -2,18 +2,21 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/Button"
-import { Input } from "@/components/Input"
 import { FormEvent } from "react"
 import { api } from "@/lib/api"
 import { AxiosError } from "axios"
-import Link from 'next/link'
 import { SelectPremio } from "@/components/SelectPremio"
+import { ModalLink } from "@/components/ModalLink"
 
 
 
 export default function RoletaPremio() {
   const [paletes, setPaletes] = useState(0);
   const [options, setOptions] = useState([])
+  const [modLink, setModLink] = useState(false)
+  const [url, setUrl] = useState('')
+  const name = localStorage.getItem('name')
+
 
   useEffect(() => {
     const amountSliceString = localStorage.getItem('amountSlice');
@@ -58,10 +61,10 @@ export default function RoletaPremio() {
       premios: premios
     }).then((res) => {
       console.log(res)
-      alert('Premios OK!')
+      setUrl(`/roleta?name=${name}`)
+      setModLink(true)
       localStorage.removeItem('name')
       localStorage.removeItem('amountSlice')
-      window.location.href = '/menu'
     }).catch((err: AxiosError) => {
       console.log(err.response)
     })
@@ -69,6 +72,10 @@ export default function RoletaPremio() {
   }
 
   
+  function close () {
+    setModLink(false)
+    window.location.href = '/menu'
+  }
 
 
 
@@ -90,6 +97,8 @@ export default function RoletaPremio() {
         }
         <Button title="Confirmar" type="1" />
       </form>
+
+      {modLink && <ModalLink close={() => close()} url={url} />}
     </div>
   )
 } 
