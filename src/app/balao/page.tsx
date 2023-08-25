@@ -20,7 +20,6 @@ export default function Balao() {
             name: name
         } );
         const mData = response.data;
-        console.log("data puro", mData.data)
         setData(mData.data);
 
         if (mData.data) {
@@ -36,7 +35,6 @@ export default function Balao() {
   
     fetchData();
   }, []);
-  console.log("BALÃO: ", data)
 
   const [tentativas, setTentativas] = useState(true)
 
@@ -45,7 +43,6 @@ export default function Balao() {
       name: name,
       typ: 1,
     }).then((test) => {
-      console.log("test", test.data)
       setTentativas(test.data.data)
       
     })
@@ -54,10 +51,10 @@ export default function Balao() {
 
 
   return (
-      <div className='flex items-center justify-center flex-col w-full h-screen overflow-y-hidden'>
+      <div className='flex items-center justify-center flex-col w-full h-screen overflow-y-hidden' >
           
-          {// @ts-ignore
-            ((data.length !== 0 ) && (tentativas)) ? <DataBalaoComp tentativas={() => attTentativas()} data={data}/> : (tentativas === false) ? <h1 className='text-4xl'>Tentativas esgotadas</h1> : <h1 className='text-4xl'>Carregando...</h1>
+          { // @ts-ignore
+            ((data.length !== 0 ) && (tentativas)) ? <DataBalaoComp tentativas={() => attTentativas()} data={data} /> : (tentativas === false) ? <h1 className='text-4xl'>Tentativas esgotadas</h1> : <h1 className='text-4xl'>Carregando...</h1>
           }
       </div>
   )

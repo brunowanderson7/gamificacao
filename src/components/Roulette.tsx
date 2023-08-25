@@ -8,6 +8,9 @@ import { OverlayModal } from './OverlayModal';
 import { api } from '@/lib/api';
 import { OverlayBlock } from './OverlayBlock';
 
+interface Zap {
+    zap: string;
+}
 
 interface DataProps {
     option: string;
@@ -19,12 +22,13 @@ interface DataProps {
 
 interface RouletteProps {
     data: DataProps[]
+    zap: Zap;
     tentativas: () => void;
     restantes: () => void;
     block: () => void;
 }
 
-export function Roulette({ data, tentativas, restantes, block }: RouletteProps){
+export function Roulette({ data, zap, tentativas, restantes, block }: RouletteProps){
 
 
     const [mustSpin, setMustSpin] = useState(false);
@@ -61,7 +65,7 @@ export function Roulette({ data, tentativas, restantes, block }: RouletteProps){
             {
                 over && <OverlayBlock/>
             }            
-            <div className='flex relative p-2 rounded-full items-center justify-center bg-purple-500 shadow-black shadow-md'>
+            <div className='flex relative p-2 rounded-full items-center justify-center bg-violet-600 shadow-black shadow-md'>
                 <Wheel
                     fontWeight={700}
                     fontSize={30}
@@ -86,7 +90,7 @@ export function Roulette({ data, tentativas, restantes, block }: RouletteProps){
                 </motion.div>
             </div>
             {
-                modal && <OverlayModal block={block} name={data[win].option} info={'Você ganhou um prêmio!'} close={close}/>
+                modal && <OverlayModal zap={zap.zap} block={block} name={data[win].option} info={'Você ganhou um prêmio!'} close={close}/>
             }
             
         </div>

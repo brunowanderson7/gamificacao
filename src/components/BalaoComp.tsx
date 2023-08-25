@@ -2,21 +2,28 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { OverlayModal } from './OverlayModal'
+import { api } from '@/lib/api'
+
+interface Zap {
+    zap: string;
+}
 
 interface BalaoProps {
     color: string;
     name: string;
     id: string;
+    zap: Zap;
     tentativas: () => void;
     restantes: () => void;
     block: () => void;
 }
 
-export function BalaoComp( {color, name, id, tentativas, restantes, block}: BalaoProps ) {
+export function BalaoComp( {color, name, id, zap, tentativas, restantes, block}: BalaoProps ) {
     const [poow, setPoow] = useState(true)
     const [modal, setModal] = useState(false)
+    
 
     function close () {
         setModal(false)
@@ -46,7 +53,7 @@ export function BalaoComp( {color, name, id, tentativas, restantes, block}: Bala
             </motion.div>
 
             {
-                modal && <OverlayModal block={block} name={name} info={'Você ganhou um prêmio!'} close={close}/>
+                modal && <OverlayModal zap={zap.zap} block={block} name={name} info={'Você ganhou um prêmio!'} close={close}/>
             }
         </>
         

@@ -8,6 +8,8 @@ import { api } from "@/lib/api"
 interface BalaoPros {
     id: string;
     name: string;
+    title: string;
+    subtitle: string;
     limitUse: number;
     primaryColor: string;
     secondaryColor: string;
@@ -23,8 +25,19 @@ interface DataBalaoProps {
 
 export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
 
-    console.log("Data Rolette log", data)
+    const [zap, setZap] = useState({zap: ''})
 
+    useEffect (() => {
+        async function getZap() {
+            const res = await api.get('/getzap').then((res) => {
+                setZap(res.data)
+            })
+        }
+
+        getZap()
+    }, [])
+
+    
     const newPremios = data.premios?.split(',')
     const [premios, setPremios] = useState<string[]>([])
      
@@ -34,7 +47,6 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
             const res = await api.post('/getnames2', {
                 id: data.premios
             }).then((res) => {
-                console.log("res", res.data)
                 const names = res.data
                 setPremios(names.data)
             })
@@ -53,8 +65,6 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
         )
     })
 
-    console.log("New Data log",newData)
-
 
     function shuffleArray<T>(array: T[]): T[] {
         const shuffledArray = [...array];
@@ -71,7 +81,7 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
     async function attIps() {
         const up = await api.post('/updateip', {
             name: data.name,
-            typ: 0,
+            typ: 1,
         }).then((up) => {
             setRestantes(restantes - 1)
         })
@@ -87,16 +97,20 @@ export function DataBalaoComp ( { data, tentativas }: DataBalaoProps ){
 
 
     return (
-        <div className="flex items-center justify-center flex-col w-full h-screen overflow-y-hidden">
-            <div className="flex items-center justify-center p-4 rounded-lg text-2xl">
-                Restam <span className="p-1 mx-1 border-2 bg-white/30 text-black rounded-md">{ restantes }</span> tentativa(s)!
+        <div className={`${data.bgColor} flex items-center justify-center flex-col w-full h-screen`} >
+            <div className="relative flex flex-col items-center justify-center text-center">
+                <h1 className="text-[38px] sm:text-[32px] font-black">{data.title}</h1>
+                <h2 className="text-[28px] sm:text-[22px] font-semibold">{data.subtitle}</h2>
             </div>
-            <div className="mt-4 items-center justify-center flex gap-2 bg-black/20 p-8 sm:p-4 rounded-lg">
+            <div className="flex items-center justify-center p-4 rounded-lg text-2xl">
+                Restam <span className="p-1 mx-1 border-2 text-black rounded-md">{ restantes }</span> tentativa(s)!
+            </div>
+            <div className={`${data.secondaryColor} mt-4 items-center justify-center flex flex-wrap gap-2 p-2 rounded-lg`}>
 
                 {
                     randomizedArray.map((balao, index) => {
                         return (
-                            <BalaoComp restantes={attIps} block={blockIp} tentativas={tentativas} key={index} color={data.primaryColor} name={balao[1]} id={balao[0].toString()}/>
+                            <BalaoComp zap={zap} restantes={attIps} block={blockIp} tentativas={tentativas} key={index} color={data.primaryColor} name={balao[1]} id={balao[0].toString()}/>
                         )
                     })
                 }

@@ -10,32 +10,46 @@ import Link from 'next/link'
 import { SelectColor } from "@/components/SelectColor"
 
 
-export default function NovaRoleta() {
+export default function NovoBalao() {
+
+  const token = localStorage.getItem('token')
+  if (token == null) {
+    window.location.href = '/'
+  }
+  
+
+  function hashStr() {
+    return Math.random().toString(36).substr(2, 10);
+  }
+  const hashname = hashStr()
 
   async function handleSubmitBalao(event: FormEvent<HTMLFormElement>) {
     event.preventDefault() // Evita o comportamento padrão de abrir uma nova página
 
     const formData = new FormData(event.currentTarget)
     const name = formData.get('name')
+    const subtitle = formData.get('subtitle')
     const amount = Number(formData.get('palete'))
     const limitUse = Number(formData.get('limit'))
     const pcolor = formData.get('pcolor')
-    // const scolor = formData.get('scolor')
-    // const bgcolor = formData.get('bgcolor')
+    const scolor = formData.get('scolor')
+    const bgcolor = formData.get('bgcolor')
 
-    console.log(name, amount, limitUse, pcolor)
+    console.log(name, subtitle, amount, limitUse, pcolor, scolor, bgcolor)
 
     const res = await api.post('/addbalao', {
-        name: name,
+        name: hashname,
+        title: name,
+        subtitle: subtitle,
         amountSlice: amount,
         limitUse: limitUse,
         primaryColor: pcolor,
-        secondaryColor: '',
-        bgColor: '',
+        secondaryColor: scolor,
+        bgColor: bgcolor,
         premios: ''
       }).then((res) => {
         console.log(res)
-        localStorage.setItem('nameB', name as string)
+        localStorage.setItem('nameB', hashname as string)
         localStorage.setItem('amountSliceB', amount as unknown as string)
         window.location.href = '/menu/balao/addpremio'
       }).catch((err: AxiosError) => {
@@ -52,10 +66,11 @@ export default function NovaRoleta() {
       </div>
 
       <form onSubmit={handleSubmitBalao} className="lg:w-1/4 md:w-1/3 w-2/3 flex flex-col gap-y-2">
-        <Input id="name" type="text" title="Nome" />
-        <SelectColor id="pcolor"/>
-        {/* <Input id="scolor" type="text" title="Cor Secundaria" /> */}
-        {/* <Input id="bgcolor" type="text" title="Cor de Fundo" /> */}
+        <Input id="name" type="text" title="Titulo" />
+        <Input id="subtitle" type="text" title="Subtitulo" />
+        <SelectColor id="pcolor" typ={1} title="Cor dos Balões"/>
+        <SelectColor id="scolor" typ={2} title="Cor Secundaria"/>
+        <SelectColor id="bgcolor" typ={2} title="Cor de Fundo"/>
         <Select id="palete" min={4} max={16} title="Numero de Balões" /> {/*  Apenas numeros pares */}
         <Select id="limit" min={1} max={99} title="Limite de Tentativas" />
         <Button title="Confirmar" type="1" />

@@ -9,6 +9,12 @@ import { AxiosError } from "axios"
 import Link from 'next/link'
 
 export default function Balao() {
+
+    const token = localStorage.getItem('token')
+    if (token == null) {
+        window.location.href = '/'
+    }
+  
     async function handleSubmitAdmin(event: FormEvent<HTMLFormElement>) {
         event.preventDefault() // Evita o comportamento padrão de abrir uma nova página
     

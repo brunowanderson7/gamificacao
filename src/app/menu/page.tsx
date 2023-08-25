@@ -2,9 +2,13 @@
 
 import { Button } from "@/components/Button"
 import Link from 'next/link'
-import { LinkButton } from "@/components/LinkButton"
 
-export default function Balao() {
+
+export default function Menu() {
+  const token = localStorage.getItem('token')
+  if (token == null) {
+    window.location.href = '/'
+  }
   
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -24,7 +28,7 @@ export default function Balao() {
         <Link href="/menu/check"><Button title="Checar Ganhador" type="1" /></Link>
         <Link href="/menu/roleta"><Button title="Criar Roleta" type="1" /></Link>
         <Link href="/menu/balao"><Button title="Criar Balão" type="1" /></Link>
-        <Button title="Sair" type="0"  />
+        <button onClick={handleLogout}><Button title="Sair" type="0"  /></button>
 
       </div>
 

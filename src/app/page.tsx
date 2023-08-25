@@ -3,9 +3,7 @@
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import { useState, FormEvent } from "react"
-import Cookies from 'js-cookie'
 import { api } from "@/lib/api"
-import { AxiosError } from "axios"
 
 
 export default () => {
@@ -26,13 +24,8 @@ export default () => {
     })
 
     if (res.status === 200) {
-      const { token } = res.data
-      const cookiesExpiresInSeconds = 60 * 60 * 24 * 30 // 1 mês
 
-      Cookies.set('token', token, {
-        expires: cookiesExpiresInSeconds,
-        path: '/',
-      })
+      localStorage.setItem('token', '1')
 
       window.location.href = '/menu'
     } else {

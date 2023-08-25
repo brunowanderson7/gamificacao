@@ -4,18 +4,20 @@ import { useRef } from 'react'
 
 
 
+
+
 interface ModalProps {
     name: string;
     info: string;
+    zap: string;
     close: () => void;
     block: () => void;
 }
 
 
-export function OverlayModal ({name, info, close, block} : ModalProps) {
+export function OverlayModal ({name, info, zap, close, block} : ModalProps) {
 
     const divRef = useRef(null)
-    const zap = "89994417960"
 
     const exportAndShare = async () => {
         const divElement = divRef.current;
@@ -94,9 +96,9 @@ export function OverlayModal ({name, info, close, block} : ModalProps) {
                 </div>
                 <div className='bg-white p-6 text-2xl flex justify-between gap-4 mt-4 items-center'>
                     {
-                        name !== 'Resgatado' && <button onClick={exportAndShare} className='bg-green-500 rounded-lg p-2 mx-auto text-white'>Receber</button>
+                        name !== 'Resgatado' && <button onClick={exportAndShare} className='bg-green rounded-lg p-2 mx-auto text-white'>Receber</button>
                     }
-                    <button onClick={close} className='bg-red-500 rounded-lg p-2 mx-auto text-white'>Fechar</button>
+                    <button onClick={close} className='bg-red rounded-lg p-2 mx-auto text-white'>Fechar</button>
                 </div>
             
             </div>

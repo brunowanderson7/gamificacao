@@ -14,7 +14,7 @@ interface SelectPremioProps {
 export function SelectPremio({id, options}: SelectPremioProps ) {
 
     return (
-        <select className="border-cyan-600 border-2 h-12 text-[22px] rounded-md px-2 w-full bg-slate-100 text-black" name={id} id={id}>
+        <select className="border-cyan border-2 h-12 text-[22px] rounded-md px-2 w-full bg-slate-100 text-black" name={id} id={id}>
             {options.map((option, index) => (
                 <option  id={id} key={index} value={option.id}>{option.name}</option>
             ))}

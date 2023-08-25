@@ -10,12 +10,26 @@ import { ModalLink } from "@/components/ModalLink"
 
 
 
-export default function NovaRoleta() {
+export default function NovaBalao() {
   const [balaos, setBalaos] = useState(0);
   const [options, setOptions] = useState([])
   const [modLink, setModLink] = useState(false)
-  const [url, setUrl] = useState('')
   const name = localStorage.getItem('nameB')
+
+  const [url, setUrl] = useState('')
+  const [urlServer, setUrlServer] = useState({url: ''})
+
+  useEffect (() => {
+      async function getUrl() {
+          const res = await api.get('/geturl').then((res) => {
+              setUrlServer(res.data)
+              console.log("Serverurl:", res.data)
+          })
+      }
+
+      getUrl()
+  }, [])
+
   
 
 
@@ -62,7 +76,7 @@ export default function NovaRoleta() {
       premios: premios
     }).then((res) => {
       console.log(res)
-      setUrl(`/balao?name=${name}`)
+      setUrl(`${urlServer.url}/balao?name=${name}`)
       setModLink(true)
       localStorage.removeItem('nameB')
       localStorage.removeItem('amountSliceB')

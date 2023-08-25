@@ -12,6 +12,12 @@ import { AxiosError } from "axios"
 
 export default function Premio() {
 
+  const token = localStorage.getItem('token')
+  if (token == null) {
+    window.location.href = '/'
+  }
+  
+
   async function handleSubmitPremio(event: FormEvent<HTMLFormElement>) {
     event.preventDefault() // Evita o comportamento padrão de abrir uma nova página
 

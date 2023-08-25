@@ -16,6 +16,19 @@ export default function RoletaPremio() {
   const [modLink, setModLink] = useState(false)
   const [url, setUrl] = useState('')
   const name = localStorage.getItem('name')
+  const [urlServer, setUrlServer] = useState({url: ''})
+
+
+  useEffect (() => {
+    async function getUrl() {
+        const res = await api.get('/geturl').then((res) => {
+            setUrlServer(res.data)
+            console.log("Serverurl:", res.data)
+        })
+    }
+
+    getUrl()
+}, [])
 
 
   useEffect(() => {
@@ -61,7 +74,7 @@ export default function RoletaPremio() {
       premios: premios
     }).then((res) => {
       console.log(res)
-      setUrl(`/roleta?name=${name}`)
+      setUrl(`${urlServer.url}/roleta?name=${name}`)
       setModLink(true)
       localStorage.removeItem('name')
       localStorage.removeItem('amountSlice')

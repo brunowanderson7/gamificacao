@@ -1,4 +1,16 @@
+const { hostname } = require('os')
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    images: {
+        formats: ['image/avif', 'image/webp'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'i.imgur.com',
+            }
+        ]
+    },
+}
 
 module.exports = nextConfig
